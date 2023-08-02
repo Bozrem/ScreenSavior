@@ -17,13 +17,13 @@ public class service extends Service {
     @Override
     public void onCreate() {
         Log.d("SSBS", "onCreate");
+        startService(new Intent(this, service.class));
         super.onCreate();
     }
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Notification Service started by user.", Toast.LENGTH_LONG).show();
         Log.d("SSBS","Service is working background");
         return START_STICKY;
     }
@@ -31,6 +31,5 @@ public class service extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Notification Service destroyed by user.", Toast.LENGTH_LONG).show();
     }
 }

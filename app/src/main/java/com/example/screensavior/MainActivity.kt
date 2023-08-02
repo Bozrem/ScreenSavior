@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.setup_screen)
         confirmPermissions()
-        startService(Intent(this@MainActivity, service::class.java))
+        startService(Intent(this, service::class.java))
 
         val resumeClickListener = View.OnClickListener {
             Toast.makeText(this, "Resuming activity", Toast.LENGTH_SHORT).show()
