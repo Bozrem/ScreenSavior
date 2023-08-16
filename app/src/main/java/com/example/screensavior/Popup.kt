@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.compose.runtime.Composable
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.CountDownTimer
@@ -20,8 +21,7 @@ class Popup(
     private val context: Context,
     private val duration: Long,
     private val message: String,
-    private val resumeClickListener: View.OnClickListener?,
-    private val closeAppClickListener: View.OnClickListener?
+    private val tracker: AppTracker,
 ) {
     companion object {
         private val activeOverlays = mutableListOf<Popup>()
@@ -43,6 +43,9 @@ class Popup(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun show() {
+        val activeIntent = Intent("com.example.screensavior.ACTION_ALARM_ACTIVE")
+        context.sendBroadcast(activeIntent)
+        FService.takeAudioFocus(context)
         if (overlayView == null) {
             // Inflate the overlay layout
             val inflater = LayoutInflater.from(context)
@@ -58,8 +61,8 @@ class Popup(
             val closeAppButton = overlayView?.findViewById<Button>(R.id.closeAppButton)
 
             // Set click listeners for the "Resume" and "Close App" buttons
-            resumeButton?.setOnClickListener(resumeClickListener)
-            closeAppButton?.setOnClickListener(closeAppClickListener)
+            resumeButton?.setOnClickListener { resumeClickListener() }
+            closeAppButton?.setOnClickListener { closeAppClickListener() }
 
             // Add the overlay to the WindowManager
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -79,6 +82,7 @@ class Popup(
     }
 
     private fun updateResumeButton() {
+        if (tracker.isPaused) removeAllOverlays()
         val resumeButton = overlayView?.findViewById<Button>(R.id.resumeButton)
         if (resumeButton != null) {
             val remainingSeconds = remainingTimeMillis / 1000
@@ -105,11 +109,33 @@ class Popup(
     }
 
     private fun removeOverlay() {
+        val inactiveIntent = Intent("com.example.screensavior.ACTION_ALARM_INACTIVE")
+        context.sendBroadcast(inactiveIntent)
         overlayView?.let {
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.removeView(it)
             overlayView = null
             timer?.cancel()
         }
+    }
+
+    private fun resumeClickListener() {
+        tracker.resetCount()
+        Toast.makeText(context, "Resuming activity", Toast.LENGTH_SHORT).show()
+        tracker.resumeCount(context, System.currentTimeMillis())
+        removeAllOverlays()
+        // Include other actions related to the resume click
+    }
+
+    private fun closeAppClickListener() {
+        tracker.resetCount()
+        tracker.registerPopupRemoved()
+        Toast.makeText(context, "Closing app!", Toast.LENGTH_SHORT).show()
+        removeAllOverlays()
+        val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(homeIntent)
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/AppsToTrackFragment">
+
+    <fragment
+        android:id="@+id/AppsToTrackFragment"
+        android:name="com.example.screensavior.AppsToTrackFragment"
+        android:label="Apps to Track"
+        tools:layout="@layout/app_selection_layout">
+        <!-- Define actions or arguments if needed -->
+        <action
+            android:id="@+id/action_AppsToTrackFragment_to_setupSelectionFragment"
+            app:destination="@id/setupSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupSelectionFragment"
+        android:name="com.example.screensavior.SetupSelectionFragment"
+        android:label="SetupSelectionFragment" />
+</navigation>
