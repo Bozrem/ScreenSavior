@@ -1,4 +1,4 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 public class AppInfo {
-    String appName;
-    String packageName;
-    Drawable icon;
+    public String appName;
+    public String packageName;
+    public Drawable icon;
     boolean isTracked = false;
 
     public void checkTracked(Context context){
         List<String> trackedApps = SharedPreferencesController.loadStringList(context, "trackedApps");
-        if (trackedApps.contains(packageName)) {
+        if (trackedApps != null && trackedApps.contains(packageName)) {
             Log.d("ScreenSavior", packageName + " is tracked");
             isTracked = true;
         }

@@ -1,8 +1,8 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,6 +48,7 @@ public class AppTracker implements Serializable {
         cancelAlarm(context);
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     public void resumeCount(Context context, long systemTime) {
         if (paused && (systemTime - lastActionTime) > inactionThreshold) {
             count = 0;
@@ -61,13 +62,14 @@ public class AppTracker implements Serializable {
         lastActionTime = systemTime;
         paused = false;
         cancelAlarm(context);
-        long alarmTriggerTime = systemTime + (triggerTime / 2) - count;
+        long alarmTriggerTime = systemTime + (triggerTime) - count;
+        Log.d("SSBS", systemTime + " alarm time: " + alarmTriggerTime);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("packageName", packageName);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         if (systemTime - lastPopupTime < popupCoolDown) alarmTriggerTime = 0;
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTriggerTime, pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTriggerTime, pendingIntent);
         Log.d("SSBS", "alarm started to go off in " + (alarmTriggerTime-systemTime));
     }
 

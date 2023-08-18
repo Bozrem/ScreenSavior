@@ -1,8 +1,6 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppAdapter extends ArrayAdapter<AppInfo> {
@@ -47,7 +44,7 @@ public class AppAdapter extends ArrayAdapter<AppInfo> {
             List<String> trackedApps = SharedPreferencesController.loadStringList(context, "trackedApps");
 
             if (isChecked) {
-                if (!trackedApps.contains(appInfo.packageName)) {
+                if (trackedApps!=null && !trackedApps.contains(appInfo.packageName)) {
                     trackedApps.add(appInfo.packageName);
                 }
             } else {

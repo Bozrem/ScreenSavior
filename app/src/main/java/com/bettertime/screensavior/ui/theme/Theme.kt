@@ -1,4 +1,4 @@
-package com.example.screensavior.ui.theme
+package com.bettertime.screensavior.ui.theme
 
 import android.app.Activity
 import android.os.Build

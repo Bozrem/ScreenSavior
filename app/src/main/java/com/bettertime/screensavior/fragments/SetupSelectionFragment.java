@@ -1,4 +1,4 @@
-package com.example.screensavior;
+package com.bettertime.screensavior.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
+
+import com.bettertime.screensavior.R;
 
 
 public class SetupSelectionFragment extends Fragment{
@@ -21,19 +24,12 @@ public class SetupSelectionFragment extends Fragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.setup_selection_layout, container, false);
 
-        Button simpleSetupButton = rootView.findViewById(R.id.simpleSetupButton);
-        Button advancedSetupButton = rootView.findViewById(R.id.advancedSetupButton);
+        Button simpleSetupButton = rootView.findViewById(R.id.setupButton);
         simpleSetupButton.setOnClickListener(v -> {
-            Log.d("ScreenSavior", "simple click");
-            // Code for handling simple setup button click
-            // You might navigate to a different fragment, open a new activity, etc.
-
-        });
-
-        advancedSetupButton.setOnClickListener(v -> {
-            Log.d("ScreenSavior", "advanced click");
-            // Code for handling advanced setup button click
-            // Similar to the simple setup button, you might perform some action related to advanced setup
+            Log.d("ScreenSavior", "setup click");
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("setupMode", true);
+            Navigation.findNavController(rootView).navigate(R.id.enter_config_settings_with_setup, bundle);
         });
 
         return rootView;

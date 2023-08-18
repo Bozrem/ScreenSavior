@@ -1,4 +1,4 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 class AlarmReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("SSBS", "alarm Received")
+        Log.d("SSBS", "alarm Received with SystemTime" + System.currentTimeMillis())
         val packageName: String? = intent.getStringExtra("packageName")
         val manager: AppTrackerManager = AppTrackerManager.getInstance(context)
         val tracker: AppTracker = manager.getFromKey(packageName)

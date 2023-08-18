@@ -1,4 +1,4 @@
-package com.example.screensavior.ui.theme
+package com.bettertime.screensavior.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

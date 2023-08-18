@@ -1,4 +1,4 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
 import android.content.Context;
 

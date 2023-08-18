@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "921332152795",
+    "project_id": "screen-savior",
+    "storage_bucket": "screen-savior.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921332152795:android:5de14c4d5d03af44138ffe",
+        "android_client_info": {
+          "package_name": "com.bettertime.screensavior"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921332152795-c39c0k0o1ff22md1vmj96ftt1oapiqdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwYCIFYodPOOZ0-2pg3V0-VaYM-6OyJSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921332152795-c39c0k0o1ff22md1vmj96ftt1oapiqdj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

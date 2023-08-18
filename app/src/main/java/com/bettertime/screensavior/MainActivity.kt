@@ -1,4 +1,4 @@
-package com.example.screensavior
+package com.bettertime.screensavior
 
 import android.app.ActivityManager
 import android.app.AppOpsManager
@@ -7,14 +7,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
     private var isServiceRunning = false
+    val db = Firebase.firestore
     companion object{
         const val debugMode = false
     }
@@ -23,41 +29,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
+        /*
+        val testData = hashMapOf(
+            "one" to "this",
+            "two" to "is",
+            "three" to "a",
+            "four" to "test",
+        )
+        db.collection("test-data")
+            .add(testData)
+            .addOnSuccessListener { documentReference ->
+                Log.d("ScreenSavior", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("ScreenSavior", "Error adding document", e)
+            }
+         */
+        checkSharedPreferences()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        //navController.navigate(R.id.AppsToTrackFragment)
 
-
-        confirmPermissions()
-        //SharedPreferencesController.clearSP(this)
-        isServiceRunning = isYourForegroundServiceRunning()
-        if (!isServiceRunning) {
-            startYourForegroundService()
+        if (SharedPreferencesController.loadBool(this, "setupComplete") && !isForegroundServiceRunning()) {
+            startForegroundService()
         }
-        if (debugMode) {
-            SharedPreferencesController.saveStringList(
-                this,
-                "trackedApps",
-                listOf<String>("com.android.chrome", "com.google.android.youtube")
-            )
-            SharedPreferencesController.saveLong(this, "pauseTime", 10000L)
-            SharedPreferencesController.saveLong(this, "triggerTime", 60000L)
-            SharedPreferencesController.saveLong(this, "countResetTime", 60000L)
-            SharedPreferencesController.saveLong(this, "pollingTime", 5000L)
-            SharedPreferencesController.saveLong(this, "popupCoolDown", 15000L)
-
-        } else {
-            checkSharedPreferences()
-        }
-
     }
-    private fun startYourForegroundService() {
+    fun startForegroundService() {
+        val stopIntent = Intent(this, FService::class.java)
+        stopService(stopIntent)
         val serviceIntent = Intent(this, FService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
 
-    private fun isYourForegroundServiceRunning(): Boolean {
+    private fun isForegroundServiceRunning(): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (services in manager.getRunningServices(Integer.MAX_VALUE)) {
             if (FService::class.java.name == services.service.className) {
@@ -67,31 +69,6 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private fun confirmPermissions(): Boolean {
-        val REQUEST_OVERLAY_PERMISSION = 1001
-        if (!hasUsageStatsPermission()) openUsageStatsSettings()
-        if (!Settings.canDrawOverlays(this)) {
-            val intent =
-                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION)
-        }
-        return true
-    }
-
-    private fun hasUsageStatsPermission(): Boolean {
-        val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = appOps.checkOpNoThrow(
-            AppOpsManager.OPSTR_GET_USAGE_STATS,
-            android.os.Process.myUid(),
-            packageName
-        )
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
-
-    private fun openUsageStatsSettings() {
-        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-    }
-
     private fun checkSharedPreferences() {
         val defaultTrackedApps = listOf<String>(
             "com.android.chrome",
@@ -99,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             "com.google.android.youtube",
         )
         val defaultPauseTime = 30000L
-        val defaultTriggerTime = 600000L
+        val defaultTriggerTime = 60000L
         val defaultCountResetTime = 120000L
         val defaultPollingTime = 5000L
         val defaultPopupCoolDown = 30000L

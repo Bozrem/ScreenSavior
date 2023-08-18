@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">ScreenSavior</string>
     <string name="app_icon">Application icon</string>
-    <string name="advanced_setup">advanced setup</string>
-    <string name="simple_setup">simple setup</string>
+    <string name="advanced_setup">advanced</string>
+    <string name="simple_setup">simple</string>
+    <string name="begin_setup">begin setup</string>
 
 </resources>

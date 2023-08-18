@@ -3,20 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/AppsToTrackFragment">
+    app:startDestination="@id/MainMenuFragment">
+
+    <fragment
+        android:id="@+id/MainMenuFragment"
+        android:name="com.bettertime.screensavior.fragments.MainMenuFragment"
+        android:label="SetupSelectionFragment"
+        tools:layout="@layout/main_menu">
+        <action
+            android:id="@+id/open_setup_action"
+            app:destination="@id/SetupSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SetupSelectionFragment"
+        android:name="com.bettertime.screensavior.fragments.SetupSelectionFragment"
+        android:label="SetupSelectionFragment"
+        tools:layout="@layout/setup_selection_layout" >
+        <action
+            android:id="@+id/enter_config_settings_with_setup"
+            app:destination="@id/ConfigSettings" />
+    </fragment>
 
     <fragment
         android:id="@+id/AppsToTrackFragment"
-        android:name="com.example.screensavior.AppsToTrackFragment"
+        android:name="com.bettertime.screensavior.fragments.AppsToTrackFragment"
         android:label="Apps to Track"
-        tools:layout="@layout/app_selection_layout">
-        <!-- Define actions or arguments if needed -->
+        tools:layout="@layout/app_selection_layout" >
         <action
-            android:id="@+id/action_AppsToTrackFragment_to_setupSelectionFragment"
-            app:destination="@id/setupSelectionFragment" />
+            android:id="@+id/backToConfigSetup"
+            app:destination="@id/ConfigSettings" />
+        <action
+            android:id="@+id/advanceToPermissions"
+            app:destination="@id/confirmPermissionsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ConfigSettings"
+        android:name="com.bettertime.screensavior.fragments.ConfigSettings"
+        android:label="Advanced Setup Configuration"
+        tools:layout="@layout/config_settings" >
+        <action
+            android:id="@+id/backToSetupScreen"
+            app:destination="@id/SetupSelectionFragment" />
+        <action
+            android:id="@+id/advanceToTrackedAppsSetup"
+            app:destination="@id/AppsToTrackFragment" />
     </fragment>
     <fragment
-        android:id="@+id/setupSelectionFragment"
-        android:name="com.example.screensavior.SetupSelectionFragment"
-        android:label="SetupSelectionFragment" />
+        android:id="@+id/confirmPermissionsFragment"
+        android:name="com.bettertime.screensavior.fragments.ConfirmPermissionsFragment"
+        android:label="ConfirmPermissionsFragment" >
+        <action
+            android:id="@+id/backToTrackedApps"
+            app:destination="@id/AppsToTrackFragment" />
+        <action
+            android:id="@+id/returnToMain"
+            app:destination="@id/MainMenuFragment" />
+    </fragment>
+
 </navigation>

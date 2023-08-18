@@ -1,13 +1,8 @@
-package com.example.screensavior;
+package com.bettertime.screensavior;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +31,18 @@ public class SharedPreferencesController {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(key, value);
         editor.apply();
+    }
+
+    public static void saveBool(Context context, String key, boolean value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ScreenSaviorPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public static boolean loadBool(Context context, String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("ScreenSaviorPreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key, false); // Using 0 as a default value
     }
 
     public static void saveStringList(Context context, String key, List<String> stringList) {

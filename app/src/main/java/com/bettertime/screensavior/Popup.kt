@@ -1,10 +1,6 @@
-package com.example.screensavior
+package com.bettertime.screensavior
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import androidx.compose.runtime.Composable
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
